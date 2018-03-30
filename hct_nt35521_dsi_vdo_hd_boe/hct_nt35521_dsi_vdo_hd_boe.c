@@ -56,7 +56,7 @@
 #define FRAME_WIDTH                                          (720)
 #define FRAME_HEIGHT                                         (1280)
 
-#define REGFLAG_DELAY                                         0XFE
+#define REGFLAG_DELAY                                         0XEE
 #define REGFLAG_END_OF_TABLE                                  0xFF   // END OF REGISTERS MARKER
 
 #define LCM_ID_NT35521  0x5521
@@ -186,8 +186,8 @@ static void push_table(struct LCM_setting_table *table, unsigned int count, unsi
 }
 
 static struct LCM_setting_table lcm_initialization_setting[] = {
-//REGFLAG_END_OF_TABLE = 0xFF;
 //REGFLAG_DELAY = 0xEE;
+//REGFLAG_END_OF_TABLE = 0xFF;
 
 //{0xf0, 5, {0x52,0x08,0x00}},
 //{0xf0, 5, {0x55,0xaa,0x52,0x08,0x00}},

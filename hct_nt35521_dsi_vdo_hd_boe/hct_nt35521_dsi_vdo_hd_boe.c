@@ -446,7 +446,7 @@ static void lcm_resume(void)
     dsi_set_cmdq(data_array,1,1);
     MDELAY(10);
  */
- return lcm_init_();
+ return lcm_init();
 }
 
 

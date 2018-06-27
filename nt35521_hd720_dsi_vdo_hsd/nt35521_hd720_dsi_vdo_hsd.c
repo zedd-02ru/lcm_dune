@@ -92,7 +92,7 @@ static LCM_UTIL_FUNCS lcm_util = {0};
 struct LCM_setting_table {
     unsigned cmd;
     unsigned char count;
-    unsigned char para_list[64];
+    unsigned char para_list[64]; //72
 };
 
 // ---------------------------------------------------------------------------
@@ -102,11 +102,14 @@ struct LCM_setting_table {
 static void lcm_set_util_funcs(const LCM_UTIL_FUNCS *util)
 {
     memcpy(&LCM_UTIL_FUNCS, util, sizeof(LCM_UTIL_FUNCS));
+    //memcpy(&lcm_util, util, sizeof(LCM_UTIL_FUNCS));
 }
 
 static void lcm_get_params(LCM_PARAMS *params)
 {
     _memzero_(params, sizeof(LCM_PARAMS));
+    //memset(params, 0, sizeof(LCM_PARAMS));
+	
     params->dsi.LANE_NUM = 3;
     params->dsi.vertical_sync_active = 6;
     params->dsi.vertical_backporch = 14;
@@ -317,7 +320,7 @@ static struct LCM_setting_table lcm_initialization_setting[] = {
     { 0xF7, 0x01, {0x10}},
     { 0x35, 0x01, {0x00}},
     { 0x11, 0x01, {0x00}},
-    { REGFLAG_DELAY, 0x78, {}},
+    { REGFLAG_DELAY, 120, {}},
     { 0x29, 0x01, {0x00}},
     { REGFLAG_END_OF_TABLE, 0x00, {}}
 
@@ -330,6 +333,7 @@ static struct LCM_setting_table lcm_initialization_setting[] = {
 
 static void lcm_init(void)
 {
+    //unsigned int data_array[16];
     SET_RESET_PIN(1);
     MDELAY(10);
     SET_RESET_PIN(0);
@@ -343,10 +347,10 @@ static void lcm_suspend(void)
 {
     unsigned int data_array[16];
     data_array[0] = 0x280500;
-    dsi_set_cmdq(data_array);
+    dsi_set_cmdq(data_array, 1, 1);
     MDELAY(20);
     data_array[0] = 0x100500;
-    dsi_set_cmdq(data_array);
+    dsi_set_cmdq(data_array, 1, 1);
     MDELAY(120);
     data_array[0] = 0x23902;
     data_array[1] = 0x14F;
@@ -408,13 +412,13 @@ static unsigned int lcm_esd_recover(void)
 // ---------------------------------------------------------------------------
 LCM_DRIVER nt35521_hd720_dsi_vdo_hsd_lcm_drv=
 {
-    .name			= "nt35521_hd720_dsi_vdo_hsd",
+    .name	    = "nt35521_hd720_dsi_vdo_hsd",
     .set_util_funcs = lcm_set_util_funcs,
     .get_params     = lcm_get_params,
     .init           = lcm_init,
     .suspend        = lcm_suspend,
     .resume         = lcm_resume,
-    .compare_id    = lcm_compare_id,
+    .compare_id     = lcm_compare_id,
 #if 0//defined(LCM_DSI_CMD_MODE)
     //.set_backlight	= lcm_setbacklight,
     //.set_pwm        = lcm_setpwm,
